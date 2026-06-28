@@ -2,7 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const initSqlJs = require('sql.js');
 
-const dbPath = path.join(__dirname, '../../evenin.db');
+const isVercel = process.env.VERCEL === '1' || process.env.VERCEL === 'true';
+const originalDbPath = path.join(__dirname, '../../evenin.db');
+const dbPath = isVercel ? '/tmp/evenin.db' : originalDbPath;
+
 let db = null;
 let inTransaction = false;
 
@@ -70,6 +73,13 @@ function createTables() {
 
 async function initDb() {
   if (db) return db;
+
+  if (isVercel) {
+    if (!fs.existsSync(dbPath) && fs.existsSync(originalDbPath)) {
+      fs.copyFileSync(originalDbPath, dbPath);
+    }
+  }
+
   const SQL = await initSqlJs();
   const dbExists = fs.existsSync(dbPath);
   if (dbExists) {
