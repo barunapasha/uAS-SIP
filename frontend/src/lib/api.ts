@@ -14,9 +14,8 @@ export async function apiFetch(path: string, options: RequestInit = {}) {
     }
   }
 
-  if (!baseUrl) {
-    throw new Error('API URL is not defined (NEXT_PUBLIC_API_URL missing)');
-  }
+  // Fallback to local URL during SSR to prevent compile/build crashes
+  const finalUrl = baseUrl || 'http://localhost:3001/api';
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -26,7 +25,7 @@ export async function apiFetch(path: string, options: RequestInit = {}) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const res = await fetch(`${baseUrl}${path}`, {
+  const res = await fetch(`${finalUrl}${path}`, {
     ...options,
     headers: {
       ...headers,
