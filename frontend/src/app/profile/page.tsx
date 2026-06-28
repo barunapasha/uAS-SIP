@@ -75,7 +75,7 @@ export default function ProfilePage() {
       {currentUser && (
         <div className="bg-zinc-850 border rounded-xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <h1 className="text-2xl font-bold text-white">{currentUser.name || 'User EventIn'}</h1>
+            <h1 className="text-2xl font-bold text-white">{currentUser.name || 'User TiketInAja'}</h1>
             <p className="text-sm text-zinc-400">{currentUser.email}</p>
           </div>
           <span className="inline-flex self-start sm:self-center items-center rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-700 capitalize border border-red-100">

@@ -22,7 +22,7 @@ async function seed() {
     const adminId = uuidv4();
     db.run(
       `INSERT INTO users (id, name, email, password_hash, role, created_at)
-       VALUES (?, 'Admin EvenIn', 'admin@evenin.id', ?, 'admin', datetime('now'))`,
+       VALUES (?, 'Admin TiketInAja', 'admin@evenin.id', ?, 'admin', datetime('now'))`,
       [adminId, adminHash]
     );
 

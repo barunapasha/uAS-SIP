@@ -29,7 +29,7 @@ export default function Navbar() {
       <header className="border-b border-zinc-800 border-zinc-900 bg-black">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link href="/" className="text-xl font-black text-white tracking-wider">
-            EVENT<span className="text-primary">IN</span>
+            TIKET<span className="text-primary">IN</span>AJA
           </Link>
           <div className="h-8 w-24 animate-pulse rounded bg-zinc-800" />
         </div>
@@ -42,7 +42,7 @@ export default function Navbar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-8">
           <Link href="/" className="text-xl font-black text-white tracking-wider">
-            EVENT<span className="text-primary">IN</span>
+            TIKET<span className="text-primary">IN</span>AJA
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm font-semibold">
             <Link

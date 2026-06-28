@@ -120,9 +120,9 @@ export default function PaymentPage() {
 
   const paymentInstructions: Record<string, string> = {
     qris: 'Pindai QRIS menggunakan aplikasi e-wallet Anda.',
-    gopay: 'Transfer GoPay ke nomor 0812-3456-7890 a.n. EventIn.',
-    ovo: 'Transfer OVO ke nomor 0812-3456-7890 a.n. EventIn.',
-    dana: 'Transfer DANA ke nomor 0812-3456-7890 a.n. EventIn.',
+    gopay: 'Transfer GoPay ke nomor 0812-3456-7890 a.n. TiketInAja.',
+    ovo: 'Transfer OVO ke nomor 0812-3456-7890 a.n. TiketInAja.',
+    dana: 'Transfer DANA ke nomor 0812-3456-7890 a.n. TiketInAja.',
     transfer_bca: 'Transfer ke VA BCA: 80012-081234567890.',
     transfer_mandiri: 'Transfer ke VA Mandiri: 90012-081234567890.',
   };

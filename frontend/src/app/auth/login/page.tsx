@@ -45,7 +45,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md space-y-6 rounded-xl border bg-zinc-900 p-8 shadow-sm">
         <div className="space-y-2 text-center">
           <h1 className="text-2xl font-bold tracking-tight text-white">Selamat Datang Kembali</h1>
-          <p className="text-sm text-zinc-400">Masuk ke akun EventIn Anda untuk memesan tiket</p>
+          <p className="text-sm text-zinc-400">Masuk ke akun TiketInAja Anda untuk memesan tiket</p>
         </div>
 
         {error && (

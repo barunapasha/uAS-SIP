@@ -1,7 +1,7 @@
 {
   "name": "evenin-backend",
   "version": "1.0.0",
-  "description": "EventIn Backend - SQLite version",
+  "description": "TiketInAja Backend - SQLite version",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

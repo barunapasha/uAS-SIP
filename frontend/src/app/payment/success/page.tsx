@@ -89,7 +89,7 @@ function SuccessContent() {
       <div className="bg-zinc-900 border rounded-xl overflow-hidden shadow-sm print:shadow-none print:border-none">
         {/* Ticket Header */}
         <div className="bg-slate-950 text-white p-6">
-          <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">E-Ticket EventIn</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">E-Ticket TiketInAja</p>
           <h2 className="text-xl font-bold mt-1">{trx.event_title}</h2>
           <p className="text-xs text-slate-350 mt-1">{dateFormatted}</p>
         </div>

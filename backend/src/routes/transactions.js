@@ -64,7 +64,7 @@ router.post('/', authMiddleware, (req, res) => {
 
     db.run('COMMIT');
 
-    const payment_instructions = `Buka ${payment_method.toUpperCase()} → bayar ke EventIn sebesar Rp${totalPrice.toLocaleString('id-ID')}`;
+    const payment_instructions = `Buka ${payment_method.toUpperCase()} → bayar ke TiketInAja sebesar Rp${totalPrice.toLocaleString('id-ID')}`;
 
     res.status(201).json({
       message: 'Pesanan dibuat. Lanjutkan ke pembayaran.',

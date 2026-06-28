@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "EventIn — Pemesanan Tiket Online",
+  title: "TiketInAja — Pemesanan Tiket Online",
   description: "Pesan tiket event favoritmu, kapan saja, di mana saja.",
 };
 

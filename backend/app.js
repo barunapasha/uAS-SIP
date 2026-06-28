@@ -32,7 +32,7 @@ app.use('/api/transactions', transactionRoutes);
 
 // Base route
 app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to EventIn API' });
+  res.json({ message: 'Welcome to TiketInAja API' });
 });
 
 // Error handling
