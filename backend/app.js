@@ -41,18 +41,21 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Terjadi kesalahan pada server!' });
 });
 
-async function startServer() {
-  try {
-    await db.initDb();
+// Initialize database asynchronously
+db.initDb()
+  .then(() => {
     console.log('Koneksi database berhasil.');
 
-    app.listen(PORT, () => {
-      console.log(`Server berjalan di http://localhost:${PORT}`);
-    });
-  } catch (error) {
-    console.error('Gagal memulai server:', error);
-    process.exit(1);
-  }
-}
+    // Only listen if not running on Vercel
+    if (!process.env.VERCEL) {
+      app.listen(PORT, () => {
+        console.log(`Server berjalan di http://localhost:${PORT}`);
+      });
+    }
+  })
+  .catch((error) => {
+    console.error('Gagal memulai database:', error);
+  });
 
-startServer();
+// Export the Express app for Vercel Serverless
+module.exports = app;
