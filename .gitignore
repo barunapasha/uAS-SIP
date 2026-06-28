@@ -1,0 +1,19 @@
+# Claude Code and Agent folders
+.claude/
+.agents/
+.forge/
+skills-lock.json
+
+# Ignore all markdown files
+*.md
+# Except README.md
+!README.md
+
+# Local environment files (fallback)
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
