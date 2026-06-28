@@ -25,13 +25,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// Mount routes
-app.use('/api/auth', authRoutes);
-app.use('/api/events', eventRoutes);
-app.use('/api/transactions', transactionRoutes);
+// Mount routes for both local (/api) and Vercel (/_/backend/api) paths
+app.use(['/api/auth', '/_/backend/api/auth'], authRoutes);
+app.use(['/api/events', '/_/backend/api/events'], eventRoutes);
+app.use(['/api/transactions', '/_/backend/api/transactions'], transactionRoutes);
 
 // Base route
-app.get('/', (req, res) => {
+app.get(['/', '/_/backend'], (req, res) => {
   res.json({ message: 'Welcome to TiketInAja API' });
 });
 
