@@ -80,7 +80,9 @@ async function initDb() {
     }
   }
 
-  const SQL = await initSqlJs();
+  const SQL = await initSqlJs({
+    locateFile: file => path.join(__dirname, '../../node_modules/sql.js/dist', file)
+  });
   const dbExists = fs.existsSync(dbPath);
   if (dbExists) {
     const filebuffer = fs.readFileSync(dbPath);
