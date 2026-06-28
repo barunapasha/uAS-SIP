@@ -130,10 +130,45 @@ function run(sql, params = []) {
   };
 }
 
+function cancelExpiredTransactions() {
+  if (!db || inTransaction) return;
+
+  const expired = query(
+    `SELECT t.id, t.ticket_id, t.quantity, tk.event_id
+     FROM transactions t
+     JOIN tickets tk ON t.ticket_id = tk.id
+     WHERE t.status = 'pending'
+       AND datetime(t.created_at, '+15 minutes') < datetime('now')`
+  );
+
+  if (expired.length === 0) return;
+
+  try {
+    inTransaction = true;
+    db.run('BEGIN TRANSACTION');
+
+    for (const trx of expired) {
+      db.run("UPDATE transactions SET status = 'cancelled' WHERE id = ?", [trx.id]);
+      db.run("UPDATE tickets SET remaining = remaining + ? WHERE id = ?", [trx.quantity, trx.ticket_id]);
+      db.run("UPDATE events SET remaining_quota = remaining_quota + ? WHERE id = ?", [trx.quantity, trx.event_id]);
+    }
+
+    db.run('COMMIT');
+    inTransaction = false;
+    persist();
+    console.log(`Auto-cancelled ${expired.length} expired transactions.`);
+  } catch (error) {
+    try { db.run('ROLLBACK'); } catch (_) {}
+    inTransaction = false;
+    console.error('Failed to auto-cancel expired transactions:', error);
+  }
+}
+
 module.exports = {
   initDb,
   query,
   queryOne,
   run,
-  persist
+  persist,
+  cancelExpiredTransactions
 };

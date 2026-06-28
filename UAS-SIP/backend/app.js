@@ -15,6 +15,16 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+// Auto-cancel expired transactions middleware
+app.use((req, res, next) => {
+  try {
+    db.cancelExpiredTransactions();
+  } catch (err) {
+    console.error('Error auto-cancelling transactions:', err);
+  }
+  next();
+});
+
 // Mount routes
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);

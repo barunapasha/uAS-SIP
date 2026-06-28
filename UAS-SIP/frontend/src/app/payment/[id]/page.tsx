@@ -39,7 +39,27 @@ export default function PaymentPage() {
           return;
         }
 
+        if (transaction.status === 'cancelled') {
+          setError('Transaksi ini telah dibatalkan karena batas waktu pembayaran habis.');
+          return;
+        }
+
         setTrx(transaction);
+
+        if (transaction.created_at) {
+          const parts = transaction.created_at.split(/[- :]/);
+          const createdTime = Date.UTC(
+            parseInt(parts[0], 10),
+            parseInt(parts[1], 10) - 1,
+            parseInt(parts[2], 10),
+            parseInt(parts[3], 10),
+            parseInt(parts[4], 10),
+            parseInt(parts[5], 10)
+          );
+          const expireTime = createdTime + 15 * 60 * 1000;
+          const secondsLeft = Math.max(0, Math.floor((expireTime - Date.now()) / 1000));
+          setTimeLeft(secondsLeft);
+        }
       } catch (err: any) {
         setError(err.message || 'Gagal memuat data transaksi');
       } finally {

@@ -109,6 +109,25 @@ export default function ProfilePage() {
                     month: 'short',
                     year: 'numeric',
                   });
+
+                  const isExpired =
+                    trx.status === 'pending' &&
+                    trx.created_at &&
+                    (() => {
+                      const parts = trx.created_at.split(/[- :]/);
+                      const createdTime = Date.UTC(
+                        parseInt(parts[0], 10),
+                        parseInt(parts[1], 10) - 1,
+                        parseInt(parts[2], 10),
+                        parseInt(parts[3], 10),
+                        parseInt(parts[4], 10),
+                        parseInt(parts[5], 10)
+                      );
+                      return createdTime + 15 * 60 * 1000 < Date.now();
+                    })();
+
+                  const displayStatus = isExpired ? 'cancelled' : trx.status;
+
                   return (
                     <tr key={trx.id} className="hover:bg-zinc-850/50">
                       <td className="px-6 py-4 font-bold text-white">
@@ -123,20 +142,28 @@ export default function ProfilePage() {
                       </td>
                       <td className="px-6 py-4">
                         <span
-                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                            trx.status === 'paid'
-                              ? 'bg-green-50 text-green-700 border border-green-200'
-                              : 'bg-yellow-50 text-yellow-700 border border-yellow-200'
+                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold border ${
+                            displayStatus === 'paid'
+                              ? 'bg-emerald-950/30 text-emerald-500 border-emerald-900/30'
+                              : displayStatus === 'cancelled'
+                              ? 'bg-red-955/30 text-red-500 border-red-900/30'
+                              : 'bg-yellow-950/30 text-yellow-500 border-yellow-900/30'
                           }`}
                         >
-                          {trx.status === 'paid' ? 'Lunas' : 'Menunggu Pembayaran'}
+                          {displayStatus === 'paid'
+                            ? 'Lunas'
+                            : displayStatus === 'cancelled'
+                            ? 'Dibatalkan'
+                            : 'Menunggu Pembayaran'}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        {trx.status === 'paid' ? (
+                        {displayStatus === 'paid' ? (
                           <Button onClick={() => handleOpenQR(trx.id)} size="sm">
                             Lihat QR
                           </Button>
+                        ) : displayStatus === 'cancelled' ? (
+                          <span className="text-xs text-zinc-500 font-bold uppercase">Batas Waktu Habis</span>
                         ) : (
                           <Button onClick={() => window.location.href = `/payment/${trx.id}`} size="sm" variant="outline">
                             Bayar
@@ -157,39 +184,48 @@ export default function ProfilePage() {
       </div>
 
       {/* QR Code Modal (Dialog Overlay) */}
-      {activeTrxId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-zinc-900 rounded-xl shadow-lg max-w-sm w-full overflow-hidden border">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-4 border-b border-zinc-800">
-              <h3 className="font-bold text-white">E-Ticket QR Code</h3>
-              <button onClick={handleCloseQR} className="text-zinc-500 hover:text-zinc-300 font-bold text-lg p-1">
-                ✕
-              </button>
-            </div>
-            {/* Modal Body */}
-            <div className="p-6">
-              {modalLoading ? (
-                <div className="h-64 flex items-center justify-center text-zinc-500 animate-pulse">
-                  Loading QR Code...
-                </div>
-              ) : qrImage && qrToken ? (
-                <QRDisplay qrImage={qrImage} token={qrToken} />
-              ) : (
-                <div className="text-center text-red-500 font-semibold py-12">
-                  Gagal memuat QR Code.
-                </div>
-              )}
-            </div>
-            {/* Modal Footer */}
-            <div className="p-4 border-t flex justify-end">
-              <Button onClick={handleCloseQR} variant="outline" size="sm">
-                Tutup
-              </Button>
+      {activeTrxId && (() => {
+        const activeTrx = transactions.find((t) => t.id === activeTrxId);
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl shadow-lg max-w-sm w-full overflow-hidden">
+              {/* Modal Header */}
+              <div className="flex items-center justify-between p-4 border-b border-zinc-800">
+                <h3 className="font-bold text-white">E-Ticket QR Code</h3>
+                <button onClick={handleCloseQR} className="text-zinc-500 hover:text-zinc-300 font-bold text-lg p-1">
+                  ✕
+                </button>
+              </div>
+              {/* Modal Body */}
+              <div className="p-6 space-y-4">
+                {activeTrx && (
+                  <div className="text-center space-y-1">
+                    <h4 className="font-extrabold text-white text-base leading-tight">{activeTrx.event_title}</h4>
+                    <p className="text-xs text-zinc-400 capitalize">{activeTrx.ticket_type} ({activeTrx.quantity}x)</p>
+                  </div>
+                )}
+                {modalLoading ? (
+                  <div className="h-64 flex items-center justify-center text-zinc-500 animate-pulse">
+                    Loading QR Code...
+                  </div>
+                ) : qrImage && qrToken ? (
+                  <QRDisplay qrImage={qrImage} token={qrToken} />
+                ) : (
+                  <div className="text-center text-red-500 font-semibold py-12">
+                    Gagal memuat QR Code.
+                  </div>
+                )}
+              </div>
+              {/* Modal Footer */}
+              <div className="p-4 border-t border-zinc-800 flex justify-center">
+                <Button onClick={handleCloseQR} className="bg-zinc-800 text-white hover:bg-zinc-700 font-bold px-6">
+                  Tutup
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </div>
   );
 }
